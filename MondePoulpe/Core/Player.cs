@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MondePoulpe.Core
+{
+    public class Player : Actor
+    {
+        public Player()
+        {
+            Awareness = 15;
+            Name = "Poulpe";
+            Color = Colors.Player;
+            Symbol = '@';
+            X = 10;
+            Y = 10;
+        }
+    }
+}
+

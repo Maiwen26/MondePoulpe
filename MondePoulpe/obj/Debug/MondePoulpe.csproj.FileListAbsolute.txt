@@ -1,0 +1,14 @@
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\bin\Debug\terminal8x8.png
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\bin\Debug\MondePoulpe.exe.config
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\bin\Debug\MondePoulpe.exe
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\bin\Debug\MondePoulpe.pdb
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\bin\Debug\OpenTK.dll
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\bin\Debug\RLNET.dll
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\bin\Debug\RogueSharp.dll
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\bin\Debug\OpenTK.xml
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\bin\Debug\OpenTK.dll.config
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\obj\Debug\MondePoulpe.csprojAssemblyReference.cache
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\obj\Debug\MondePoulpe.csproj.CoreCompileInputs.cache
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\obj\Debug\MondePoulpe.csproj.CopyComplete
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\obj\Debug\MondePoulpe.exe
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\obj\Debug\MondePoulpe.pdb
