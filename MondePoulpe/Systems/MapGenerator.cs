@@ -31,10 +31,11 @@ namespace MondePoulpe.Systems
             _map = new Ocean();
         }
 
-        // Generate a new map that places rooms randomly
+        // Generer une nouvelle map avec des murs autours
         public Ocean CreateMap()
         {
-            // Set the properties of all cells to false
+            // Chaque cellule de la map est initialisée à True quand on peut y marcher, quand elle est transparente ou déjà explorée.
+            
             _map.Initialize(_width, _height);
 
             // Try to place as many rooms as the specified maxRooms

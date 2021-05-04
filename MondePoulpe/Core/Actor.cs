@@ -35,7 +35,7 @@ namespace MondePoulpe.Core
             }
             else
             {
-                // When not in field-of-view just draw a normal floor
+                // quand on est pas dans le champ de vision, on dessine juste un sol normal avec des "."
                 console.Set(X, Y, Colors.Floor, Colors.FloorBackground, '.');
             }
         }
