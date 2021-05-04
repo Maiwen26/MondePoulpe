@@ -153,8 +153,13 @@ namespace MondePoulpe
             // Don't bother redrawing all of the consoles if nothing has changed.
             if (_renderRequired)
             {
+                _mapConsole.Clear();
+                _statConsole.Clear();
+                _messageConsole.Clear();
+
+                Ocean.Draw(_mapConsole, _statConsole);
                 // ... previous drawing code remains here
-                Ocean.Draw(_mapConsole);
+                
                 Player.Draw(_mapConsole, Ocean);
                 Player.DrawStats(_statConsole);
                 MessageLog.Draw(_messageConsole);

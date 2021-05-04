@@ -35,17 +35,27 @@ namespace MondePoulpe.Core
         }
         // The Draw method will be called each time the map is updated
         // It will render all of the symbols/colors for each cell to the map sub console
-        public void Draw(RLConsole mapConsole)
+        public void Draw(RLConsole mapConsole, RLConsole statConsole)
         {
-            mapConsole.Clear();
+            
             foreach (Cell cell in GetAllCells())
             {
                 SetConsoleSymbolForCell(mapConsole, cell);
             }
+            // Keep an index so we know which position to draw monster stats at
+            int i = 0;
+
             // Iterate through each monster on the map and draw it after drawing the Cells
             foreach (Monster monster in _monsters)
             {
                 monster.Draw(mapConsole, this);
+                // When the monster is in the field-of-view also draw their stats
+                if (IsInFov(monster.X, monster.Y))
+                {
+                    // Pass in the index to DrawStats and increment it afterwards
+                    monster.DrawStats(statConsole, i);
+                    i++;
+                }
             }
         }
 
@@ -134,6 +144,18 @@ namespace MondePoulpe.Core
             _monsters.Add(monster);
             // After adding the monster to the map make sure to make the cell not walkable
             SetIsWalkable(monster.X, monster.Y, false);
+        }
+
+        public void RemoveMonster(Monster monster)
+        {
+            _monsters.Remove(monster);
+            // After removing the monster from the map, make sure the cell is walkable again
+            SetIsWalkable(monster.X, monster.Y, true);
+        }
+
+        public Monster GetMonsterAt(int x, int y)
+        {
+            return _monsters.FirstOrDefault(m => m.X == x && m.Y == y);
         }
 
         // Look for a random location in the room that is walkable.
