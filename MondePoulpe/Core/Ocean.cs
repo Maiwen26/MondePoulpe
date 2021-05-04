@@ -11,33 +11,136 @@ namespace MondePoulpe.Core
 {
     public class Ocean : Map
     {
-        // ... start of new code
-        public List<Rectangle> Rooms;
-
         private readonly List<Monster> _monsters;
-
         private readonly List<PNJ> _pnj;
+
+        public List<Rectangle> Rooms { get; set; }       
         public List<Door> Doors { get; set; }
+        public Stairs StairsUp { get; set; }
+        public Stairs StairsDown { get; set; }
 
         //Constructeur
         public Ocean()
         {
-            // Initialize the list of rooms when we create a new DungeonMap
-            Rooms = new List<Rectangle>();
-            // Initialize all the lists when we create a new DungeonMap
+            Game.SchedulingSystem.Clear();
+            // Initialiser la liste des salles lorsque nous créons un nouvel Océan
             _monsters = new List<Monster>();
             _pnj = new List<PNJ>();
+
+            Rooms = new List<Rectangle>(); 
             Doors = new List<Door>();
         }
-        // ... old code continues here
-        // Called by MapGenerator after we generate a new map to add the player to the map
+
+        //Cette méthode sera appelé à chaque fois mouvement du joueur pour mettre à jour son champ de vision
+        public void UpdatePlayerFieldOfView()
+        {
+            Player player = Game.Player;
+            //le calcul du champ de vision est basé sur la localisation du joueur et des alentours
+            ComputeFov(player.X, player.Y, player.Awareness, true);
+            //Toutes les cellules du champs de vision qui ont déjà été explorées sont marquées.
+            foreach (Cell cell in GetAllCells())
+            {
+                if (IsInFov(cell.X, cell.Y))
+                {
+                    SetCellProperties(cell.X, cell.Y, cell.IsTransparent, cell.IsWalkable, true);
+                }
+            }
+        }
+
+        // Retourne vrai si l'acteur peut être placé sur la cellule ou faux sinon.
+        public bool SetActorPosition(Actor actor, int x, int y)
+        {
+            // N'autoriser le placement d'un acteur que si la cellule est praticable
+            if (GetCell(x, y).IsWalkable)
+            {
+                //La cellule sur laquelle se trouvait l'acteur est maintenant praticable.
+                SetIsWalkable(actor.X, actor.Y, true);
+                //  Mise à jour de la position de l'acteur
+                actor.X = x;
+                actor.Y = y;
+                // La nouvelle cellule sur laquelle se trouve l'acteur n'est pas accessible
+                SetIsWalkable(actor.X, actor.Y, false);
+                // Essayez d'ouvrir une porte s'il y en a une ici
+                OpenDoor(actor, x, y);
+                // N'oubliez pas de mettre à jour le champ de vision si nous venons de repositionner le joueur.
+                if (actor is Player)
+                {
+                    UpdatePlayerFieldOfView();
+                }
+                return true;
+            }
+            return false;
+        }
+
+        // Renvoie la porte à la position x,y ou null si elle n'est pas trouvée.
+        public Door GetDoor(int x, int y)
+        {
+            return Doors.SingleOrDefault(d => d.X == x && d.Y == y);
+        }
+
+        // L'acteur ouvre la porte située à la position x,y
+        private void OpenDoor(Actor actor, int x, int y)
+        {
+            Door door = GetDoor(x, y);
+            if (door != null && !door.IsOpen)
+            {
+                door.IsOpen = true;
+                var cell = GetCell(x, y);
+                // Une fois que la porte est ouverte, elle doit être marquée comme transparente et ne plus bloquer le champ de vision.
+                SetCellProperties(x, y, true, cell.IsWalkable, cell.IsExplored);
+
+                Game.MessageLog.Add($"{actor.Name} a ouvert une porte");
+            }
+        }
+
+
+        // Appelé par MapGenerator après la génération d'une nouvelle carte pour ajouter le joueur à la carte.
         public void AddPlayer(Player player)
         {
             Game.Player = player;
             SetIsWalkable(player.X, player.Y, false);
             UpdatePlayerFieldOfView();
-            Game.SchedulingSystem.Add(player);
+            Game.SchedulingSystem.Add((Interfaces.IScheduleable)player);
         }
+
+
+        public void AddMonster(Monster monster)
+        {
+            _monsters.Add(monster);
+            // Après avoir ajouté le monstre à la carte, assurez-vous que la cellule n'est pas praticable.
+            SetIsWalkable(monster.X, monster.Y, false);
+            Game.SchedulingSystem.Add((Interfaces.IScheduleable)monster);
+        }
+
+        public void RemoveMonster(Monster monster)
+        {
+            _monsters.Remove(monster);
+            //Après avoir retiré le monstre de la carte, assurez-vous que la cellule est de nouveau praticable.
+            SetIsWalkable(monster.X, monster.Y, true);
+            Game.SchedulingSystem.Remove((Interfaces.IScheduleable)monster);
+        }
+
+        public Monster GetMonsterAt(int x, int y)
+        {
+            return _monsters.FirstOrDefault(m => m.X == x && m.Y == y);
+        }
+
+
+        public bool CanMoveDownToNextLevel()
+        {
+            Player player = Game.Player;
+            return StairsDown.X == player.X && StairsDown.Y == player.Y;
+        }
+
+
+        // Une méthode d'aide pour définir la propriété IsWalkable d'une cellule.
+        public void SetIsWalkable(int x, int y, bool isWalkable)
+        {
+            Cell cell = (Cell)GetCell(x, y);
+            SetCellProperties(cell.X, cell.Y, cell.IsTransparent, isWalkable, cell.IsExplored);
+        }
+
+
         // The Draw method will be called each time the map is updated
         // It will render all of the symbols/colors for each cell to the map sub console
         public void Draw(RLConsole mapConsole, RLConsole statConsole)
@@ -66,6 +169,9 @@ namespace MondePoulpe.Core
             {
                 door.Draw(mapConsole, this);
             }
+            // Add the following code after we finish drawing doors.
+            StairsUp.Draw(mapConsole, this);
+            StairsDown.Draw(mapConsole, this);
 
         }
 
@@ -103,80 +209,16 @@ namespace MondePoulpe.Core
                 }
             }
         }
-        //Cette méthode sera appelé à chaque fois mouvement du joueur pour mettre à jour son champ de vision
-        public void UpdatePlayerFieldOfView()
-        {
-            Player player = Game.Player;
-            //le calcul du champ de vision est basé sur la localisation du joueur et des alentours
-            ComputeFov(player.X, player.Y, player.Awareness, true);
-            //Toutes les cellules du champs de vision qui ont déjà été explorées sont marquées.
-            foreach (Cell cell in GetAllCells())
-            {
-                if (IsInFov(cell.X, cell.Y))
-                {
-                    SetCellProperties(cell.X, cell.Y, cell.IsTransparent, cell.IsWalkable, true);
-                }
-            }
-        }
+        
 
-        // Returns true when able to place the Actor on the cell or false otherwise
-        public bool SetActorPosition(Actor actor, int x, int y)
-        {
-            // Only allow actor placement if the cell is walkable
-            if (GetCell(x, y).IsWalkable)
-            {
-                // The cell the actor was previously on is now walkable
-                SetIsWalkable(actor.X, actor.Y, true);
-                // Update the actor's position
-                actor.X = x;
-                actor.Y = y;
-                // The new cell the actor is on is now not walkable
-                SetIsWalkable(actor.X, actor.Y, false);
-                // Don't forget to update the field of view if we just repositioned the player
-                if (actor is Player)
-                {
-                    UpdatePlayerFieldOfView();
-                }
-                return true;
-            }
-            return false;
-        }
+        
+        
 
-        // A helper method for setting the IsWalkable property on a Cell
-        public void SetIsWalkable(int x, int y, bool isWalkable)
-        {
-            Cell cell = (Cell)GetCell(x, y);
-            SetCellProperties(cell.X, cell.Y, cell.IsTransparent, isWalkable, cell.IsExplored);
-        }
-        // Returns true when able to place the Actor on the cell or false otherwise
-        public bool SetActorPosition(Actor actor, int x, int y)
-        {
-            // Previous code omitted...
+        
 
-            // Try to open a door if one exists here
-            OpenDoor(actor, x, y);
-        }
+        
 
-        public void AddMonster(Monster monster)
-        {
-            _monsters.Add(monster);
-            // After adding the monster to the map make sure to make the cell not walkable
-            SetIsWalkable(monster.X, monster.Y, false);
-            Game.SchedulingSystem.Add(monster);
-        }
-
-        public void RemoveMonster(Monster monster)
-        {
-            _monsters.Remove(monster);
-            // After removing the monster from the map, make sure the cell is walkable again
-            SetIsWalkable(monster.X, monster.Y, true);
-            Game.SchedulingSystem.Remove(monster);
-        }
-
-        public Monster GetMonsterAt(int x, int y)
-        {
-            return _monsters.FirstOrDefault(m => m.X == x && m.Y == y);
-        }
+       
 
         // Look for a random location in the room that is walkable.
         public Point GetRandomWalkableLocationInRoom(Rectangle room)
@@ -213,26 +255,9 @@ namespace MondePoulpe.Core
             }
             return false;
         }
-        // Return the door at the x,y position or null if one is not found.
-        public Door GetDoor(int x, int y)
-        {
-            return Doors.SingleOrDefault(d => d.X == x && d.Y == y);
-        }
+        
 
-        // The actor opens the door located at the x,y position
-        private void OpenDoor(Actor actor, int x, int y)
-        {
-            Door door = GetDoor(x, y);
-            if (door != null && !door.IsOpen)
-            {
-                door.IsOpen = true;
-                var cell = GetCell(x, y);
-                // Once the door is opened it should be marked as transparent and no longer block field-of-view
-                SetCellProperties(x, y, true, cell.IsWalkable, cell.IsExplored);
-
-                Game.MessageLog.Add($"{actor.Name} opened a door");
-            }
-        }
+       
     }
    
 }

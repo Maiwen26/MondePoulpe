@@ -48,6 +48,7 @@ namespace MondePoulpe
         public static CommandSystem CommandSystem { get; private set; }
         public static MessageLog MessageLog { get; private set; }
         public static SchedulingSystem SchedulingSystem { get; private set; }
+        private static int _mapLevel = 1;
 
         public static void Main()
             {
@@ -69,7 +70,7 @@ namespace MondePoulpe
 
             // Create a new MessageLog and print the random seed used to generate the level
             MessageLog = new MessageLog();
-            MessageLog.Add("The rogue arrives on level 1");
+            MessageLog.Add($"The rogue arrives on level '{_mapLevel}'");
             MessageLog.Add($"Level created with seed '{seed}'");
 
             // ... previous code omitted
@@ -82,7 +83,7 @@ namespace MondePoulpe
             _inventoryConsole = new RLConsole(_inventoryWidth, _inventoryHeight);
 
             // ... additional code omitted
-            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7);
+            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7,_mapLevel);
             Ocean = mapGenerator.CreateMap();
             Ocean.UpdatePlayerFieldOfView();
 
@@ -126,6 +127,18 @@ namespace MondePoulpe
                     else if (keyPress.Key == RLKey.Escape)
                     {
                         _rootConsole.Close();
+                    }
+                    else if (keyPress.Key == RLKey.Period)
+                    {
+                        if (Ocean.CanMoveDownToNextLevel())
+                        {
+                            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7, ++_mapLevel);
+                            Ocean = mapGenerator.CreateMap();
+                            MessageLog = new MessageLog();
+                            CommandSystem = new CommandSystem();
+                            _rootConsole.Title = $"RougeSharp RLNet Tutorial - Level {_mapLevel}";
+                            didPlayerAct = true;
+                        }
                     }
                 }
 

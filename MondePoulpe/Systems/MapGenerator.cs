@@ -23,7 +23,7 @@ namespace MondePoulpe.Systems
         // Constructing a new MapGenerator requires the dimensions of the maps it will create
         // as well as the sizes and maximum number of rooms
         public MapGenerator(int width, int height,
-        int maxRooms, int roomMaxSize, int roomMinSize)
+        int maxRooms, int roomMaxSize, int roomMinSize,int mapLevel)
         {
             _width = width;
             _height = height;
@@ -93,7 +93,8 @@ namespace MondePoulpe.Systems
                     CreateHorizontalTunnel(previousRoomCenterX, currentRoomCenterX, currentRoomCenterY);
                 }
             }
-
+            // Call right before calling PlacePlayer();
+            CreateStairs();
             // New code starts here
             PlacePlayer();
             // After the existing PlacePlayer() call, add another call to PlaceMonsters()
@@ -218,10 +219,10 @@ namespace MondePoulpe.Systems
             }
 
             // Store references to all of the neighboring cells 
-            Cell right = _map.GetCell(cell.X + 1, cell.Y);
-            Cell left = _map.GetCell(cell.X - 1, cell.Y);
-            Cell top = _map.GetCell(cell.X, cell.Y - 1);
-            Cell bottom = _map.GetCell(cell.X, cell.Y + 1);
+            Cell right = (Cell)_map.GetCell(cell.X + 1, cell.Y);
+            Cell left = (Cell)_map.GetCell(cell.X - 1, cell.Y);
+            Cell top = (Cell)_map.GetCell(cell.X, cell.Y - 1);
+            Cell bottom = (Cell)_map.GetCell(cell.X, cell.Y + 1);
 
             // Make sure there is not already a door here
             if (_map.GetDoor(cell.X, cell.Y) != null ||
@@ -245,6 +246,21 @@ namespace MondePoulpe.Systems
                 return true;
             }
             return false;
+        }
+        private void CreateStairs()
+        {
+            _map.StairsUp = new Stairs
+            {
+                X = _map.Rooms.First().Center.X + 1,
+                Y = _map.Rooms.First().Center.Y,
+                IsUp = true
+            };
+            _map.StairsDown = new Stairs
+            {
+                X = _map.Rooms.Last().Center.X,
+                Y = _map.Rooms.Last().Center.Y,
+                IsUp = false
+            };
         }
     }
 }

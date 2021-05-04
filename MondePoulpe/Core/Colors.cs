@@ -19,8 +19,15 @@ namespace MondePoulpe.Core
         public static RLColor WallBackgroundFov = Swatch.SecondaryDarker;
         public static RLColor WallFov = Swatch.SecondaryLighter;
 
+        public static RLColor DoorBackground = Swatch.ComplimentDarkest;
+        public static RLColor Door = Swatch.ComplimentLighter;
+        public static RLColor DoorBackgroundFov = Swatch.ComplimentDarker;
+        public static RLColor DoorFov = Swatch.ComplimentLightest;
 
-        //couleur du joueur :
+        public static RLColor TextHeading = RLColor.White;
+        public static RLColor Text = Swatch.DbLight;
+        public static RLColor Gold = Swatch.DbSun;
+
         public static RLColor Player = Swatch.DbLight;
 
         public static RLColor PhoqueColor = Swatch.DbBrightWood;
@@ -28,13 +35,5 @@ namespace MondePoulpe.Core
         public static RLColor PNJ = Swatch.DbSun;
 
 
-        public static RLColor TextHeading = RLColor.White;
-        public static RLColor Text = Swatch.DbLight;
-        public static RLColor Gold = Swatch.DbSun;
-
-        public static RLColor DoorBackground = Swatch.ComplimentDarkest;
-        public static RLColor Door = Swatch.ComplimentLighter;
-        public static RLColor DoorBackgroundFov = Swatch.ComplimentDarker;
-        public static RLColor DoorFov = Swatch.ComplimentLightest;
     }
 }

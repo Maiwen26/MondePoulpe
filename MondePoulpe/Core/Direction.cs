@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MondePoulpe.Core
 {
-    // Direction values correspond to numpad numbers
+    // Les valeurs de direction correspondent aux chiffres du pavé numérique
     public enum Direction
     {
         None = 0,

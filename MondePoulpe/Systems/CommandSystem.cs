@@ -187,7 +187,7 @@ namespace MondePoulpe.Systems
             if (scheduleable is Player)
             {
                 IsPlayerTurn = true;
-                Game.SchedulingSystem.Add(Game.Player);
+                Game.SchedulingSystem.Add((IScheduleable)Game.Player);
             }
             else
             {
@@ -196,7 +196,7 @@ namespace MondePoulpe.Systems
                 if (monster != null)
                 {
                     monster.PerformAction(this);
-                    Game.SchedulingSystem.Add(monster);
+                    Game.SchedulingSystem.Add((IScheduleable)monster);
                 }
 
                 ActivateMonsters();

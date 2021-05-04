@@ -22,15 +22,8 @@ namespace MondePoulpe.Core
         public int Health { get; set; }
         public int MaxHealth { get; set; }
         public int Speed { get; set; }
-        // IScheduleable
-        public int Time
-        {
-            get
-            {
-                return Speed;
-            }
-        }
-
+       
+        
 
         // IDrawable
         public RLColor Color { get; set; }
@@ -39,13 +32,13 @@ namespace MondePoulpe.Core
         public int Y { get; set; }
         public void Draw(RLConsole console, IMap map)
         {
-            // Don't draw actors in cells that haven't been explored
+            // Ne pas dessiner d'acteurs dans des cellules qui n'ont pas été explorées
             if (!map.GetCell(X, Y).IsExplored)
             {
                 return;
             }
 
-            // Only draw the actor with the color and symbol when they are in field-of-view
+            // Ne dessinez l'acteur avec la couleur et le symbole que lorsqu'ils sont dans le champ de vision.
             if (map.IsInFov(X, Y))
             {
                 console.Set(X, Y, Color, Colors.FloorBackgroundFov, Symbol);
@@ -56,5 +49,15 @@ namespace MondePoulpe.Core
                 console.Set(X, Y, Colors.Floor, Colors.FloorBackground, '.');
             }
         }
+
+        // IScheduleable
+        public int Time
+        {
+            get
+            {
+                return Speed;
+            }
+        }
+
     }
 }

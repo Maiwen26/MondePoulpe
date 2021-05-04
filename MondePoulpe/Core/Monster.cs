@@ -11,28 +11,29 @@ namespace MondePoulpe.Core
 {
     public class Monster : Actor
     {
+        public int? TurnsAlerted { get; set; }
         public void DrawStats(RLConsole statConsole, int position)
         {
-            // Start at Y=13 which is below the player stats.
-            // Multiply the position by 2 to leave a space between each stat
+            // Commencez à Y=13 qui est en dessous des statistiques du joueur.
+            // Multipliez la position par 2 pour laisser un espace entre chaque statistique.
             int yPosition = 13 + (position * 2);
 
-            // Begin the line by printing the symbol of the monster in the appropriate color
+            // Commencez la ligne en imprimant le symbole du monstre dans la couleur appropriée
             statConsole.Print(1, yPosition, Symbol.ToString(), Color);
 
-            // Figure out the width of the health bar by dividing current health by max health
+            // Déterminez la largeur de la barre de santé en divisant la santé actuelle par la santé maximale.
             int width = Convert.ToInt32(((double)Health / (double)MaxHealth) * 16.0);
             int remainingWidth = 16 - width;
 
-            // Set the background colors of the health bar to show how damaged the monster is
+            // Définir les couleurs d'arrière-plan de la barre de santé pour indiquer le degré d'endommagement du monstre.
             statConsole.SetBackColor(3, yPosition, width, 1, Swatch.Primary);
             statConsole.SetBackColor(3 + width, yPosition, remainingWidth, 1, Swatch.PrimaryDarkest);
 
-            // Print the monsters name over top of the health bar
+            // Imprimer le nom des monstres au-dessus de la barre de santé
             statConsole.Print(2, yPosition, $": {Name}", Swatch.DbLight);
         }
 
-        public int? TurnsAlerted { get; set; }
+       
 
         public virtual void PerformAction(CommandSystem commandSystem)
         {
