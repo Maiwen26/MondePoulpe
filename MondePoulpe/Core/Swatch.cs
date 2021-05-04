@@ -49,5 +49,8 @@ namespace MondePoulpe.Core
         public static RLColor DbSky = new RLColor(109, 194, 202);
         public static RLColor DbSun = new RLColor(218, 212, 94);
         public static RLColor DbLight = new RLColor(222, 238, 214);
+
+        public static RLColor BlueDark = new RLColor(16, 23, 56);
+        public static RLColor Blue = new RLColor(37, 42, 64);
     }
 }
