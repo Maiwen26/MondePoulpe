@@ -17,3 +17,7 @@ C:/Users/maiwe/Desktop/MondePoulpe/MondePoulpe/obj/Debug/MondePoulpe.pdb
 /Users/Leonore/Documents/ENSC/Program_avancee/MondePoulpe/MondePoulpe/obj/Debug/MondePoulpe.csproj.CoreCompileInputs.cache
 /Users/Leonore/Documents/ENSC/Program_avancee/MondePoulpe/MondePoulpe/obj/Debug/MondePoulpe.exe
 /Users/Leonore/Documents/ENSC/Program_avancee/MondePoulpe/MondePoulpe/obj/Debug/MondePoulpe.pdb
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\obj\Debug\MondePoulpe.csprojAssemblyReference.cache
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\obj\Debug\MondePoulpe.csproj.CoreCompileInputs.cache
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\obj\Debug\MondePoulpe.exe
+C:\Users\maiwe\Desktop\MondePoulpe\MondePoulpe\obj\Debug\MondePoulpe.pdb

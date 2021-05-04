@@ -11,6 +11,7 @@ using RogueSharp.Random;
 namespace MondePoulpe
 {
     public static class Game
+
     {
         // Singleton of IRandom used throughout the game when generating random numbers
         public static IRandom Random { get; private set; }
@@ -45,6 +46,7 @@ namespace MondePoulpe
         public static Player Player { get; set; }
         public static Ocean Ocean { get; private set; }
         public static CommandSystem CommandSystem { get; private set; }
+        public static MessageLog MessageLog { get; private set; }
 
         public static void Main()
             {
@@ -63,6 +65,11 @@ namespace MondePoulpe
                 // Tell RLNet to use the bitmap font that we specified and that each tile is 8 x 8 pixels
                 _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight,
                   8, 8, 1f, consoleTitle);
+
+            // Create a new MessageLog and print the random seed used to generate the level
+            MessageLog = new MessageLog();
+            MessageLog.Add("The rogue arrives on level 1");
+            MessageLog.Add($"Level created with seed '{seed}'");
 
             // ... previous code omitted
             // After the line that starts _rootConsole = new RLRootConsole( ...  
@@ -147,10 +154,14 @@ namespace MondePoulpe
             if (_renderRequired)
             {
                 // ... previous drawing code remains here
+                Ocean.Draw(_mapConsole);
+                Player.Draw(_mapConsole, Ocean);
+                Player.DrawStats(_statConsole);
+                MessageLog.Draw(_messageConsole);
 
                 _renderRequired = false;
             }
-            Ocean.Draw(_mapConsole);
+           
             // Blit the sub consoles to the root console in the correct locations
             RLConsole.Blit(_mapConsole, 0, 0, _mapWidth, _mapHeight,
               _rootConsole, 0, _inventoryHeight);
@@ -164,7 +175,6 @@ namespace MondePoulpe
             // Tell RLNET to draw the console that we set
             _rootConsole.Draw();
 
-            Player.Draw(_mapConsole, Ocean);
         }
     }
 }
