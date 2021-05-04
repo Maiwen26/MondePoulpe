@@ -178,7 +178,7 @@ namespace MondePoulpe.Core
             }
 
             // If we didn't find a walkable location in the room return null
-            return null;
+            return default;
         }
 
         // Iterate through each Cell in the room and return true if any are walkable
