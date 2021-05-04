@@ -22,6 +22,14 @@ namespace MondePoulpe.Core
         public int Health { get; set; }
         public int MaxHealth { get; set; }
         public int Speed { get; set; }
+        // IScheduleable
+        public int Time
+        {
+            get
+            {
+                return Speed;
+            }
+        }
 
 
         // IDrawable

@@ -1,4 +1,6 @@
-﻿using RLNET;
+﻿using MondePoulpe.Behaviors;
+using MondePoulpe.Systems;
+using RLNET;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +30,14 @@ namespace MondePoulpe.Core
 
             // Print the monsters name over top of the health bar
             statConsole.Print(2, yPosition, $": {Name}", Swatch.DbLight);
+        }
+
+        public int? TurnsAlerted { get; set; }
+
+        public virtual void PerformAction(CommandSystem commandSystem)
+        {
+            var behavior = new StandardMoveAndAttack();
+            behavior.Act(this, commandSystem);
         }
     }
 }
