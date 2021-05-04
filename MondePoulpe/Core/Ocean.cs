@@ -1,7 +1,5 @@
-﻿using MondePoulpe.Monsters;
-using RLNET;
+﻿using RLNET;
 using RogueSharp;
-using RogueSharp.DiceNotation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +16,16 @@ namespace MondePoulpe.Core
 
         private readonly List<Monster> _monsters;
 
+        private readonly List<PNJ> _pnj;
+
+        //Constructeur
         public Ocean()
         {
             // Initialize the list of rooms when we create a new DungeonMap
             Rooms = new List<Rectangle>();
             // Initialize all the lists when we create a new DungeonMap
             _monsters = new List<Monster>();
+            _pnj = new List<PNJ>();
         }
         // ... old code continues here
         // Called by MapGenerator after we generate a new map to add the player to the map
@@ -57,6 +59,7 @@ namespace MondePoulpe.Core
                     i++;
                 }
             }
+
         }
 
         private void SetConsoleSymbolForCell(RLConsole console, Cell cell)
@@ -175,7 +178,7 @@ namespace MondePoulpe.Core
             }
 
             // If we didn't find a walkable location in the room return null
-            return default;
+            return null;
         }
 
         // Iterate through each Cell in the room and return true if any are walkable
@@ -193,9 +196,6 @@ namespace MondePoulpe.Core
             }
             return false;
         }
-
-        
-
     }
    
 }

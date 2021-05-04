@@ -25,6 +25,9 @@ namespace MondePoulpe.Core
 
         public static RLColor PhoqueColor = Swatch.DbBrightWood;
 
+        public static RLColor PNJ = Swatch.DbSun;
+
+
         public static RLColor TextHeading = RLColor.White;
         public static RLColor Text = Swatch.DbLight;
         public static RLColor Gold = Swatch.DbSun;

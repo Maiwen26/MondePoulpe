@@ -67,6 +67,8 @@
     <Compile Include="Systems\CommandSystem.cs" />
     <Compile Include="Systems\MapGenerator.cs" />
     <Compile Include="Systems\MessageLog.cs" />
+    <Compile Include="Core\PNJ.cs" />
+    <Compile Include="Core\Raie.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
