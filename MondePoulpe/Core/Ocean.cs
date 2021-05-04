@@ -17,6 +17,7 @@ namespace MondePoulpe.Core
         private readonly List<Monster> _monsters;
 
         private readonly List<PNJ> _pnj;
+        public List<Door> Doors { get; set; }
 
         //Constructeur
         public Ocean()
@@ -26,6 +27,7 @@ namespace MondePoulpe.Core
             // Initialize all the lists when we create a new DungeonMap
             _monsters = new List<Monster>();
             _pnj = new List<PNJ>();
+            Doors = new List<Door>();
         }
         // ... old code continues here
         // Called by MapGenerator after we generate a new map to add the player to the map
@@ -34,6 +36,7 @@ namespace MondePoulpe.Core
             Game.Player = player;
             SetIsWalkable(player.X, player.Y, false);
             UpdatePlayerFieldOfView();
+            Game.SchedulingSystem.Add(player);
         }
         // The Draw method will be called each time the map is updated
         // It will render all of the symbols/colors for each cell to the map sub console
@@ -58,6 +61,10 @@ namespace MondePoulpe.Core
                     monster.DrawStats(statConsole, i);
                     i++;
                 }
+            }
+            foreach (Door door in Doors)
+            {
+                door.Draw(mapConsole, this);
             }
 
         }
@@ -141,12 +148,21 @@ namespace MondePoulpe.Core
             Cell cell = (Cell)GetCell(x, y);
             SetCellProperties(cell.X, cell.Y, cell.IsTransparent, isWalkable, cell.IsExplored);
         }
+        // Returns true when able to place the Actor on the cell or false otherwise
+        public bool SetActorPosition(Actor actor, int x, int y)
+        {
+            // Previous code omitted...
+
+            // Try to open a door if one exists here
+            OpenDoor(actor, x, y);
+        }
 
         public void AddMonster(Monster monster)
         {
             _monsters.Add(monster);
             // After adding the monster to the map make sure to make the cell not walkable
             SetIsWalkable(monster.X, monster.Y, false);
+            Game.SchedulingSystem.Add(monster);
         }
 
         public void RemoveMonster(Monster monster)
@@ -154,6 +170,7 @@ namespace MondePoulpe.Core
             _monsters.Remove(monster);
             // After removing the monster from the map, make sure the cell is walkable again
             SetIsWalkable(monster.X, monster.Y, true);
+            Game.SchedulingSystem.Remove(monster);
         }
 
         public Monster GetMonsterAt(int x, int y)
@@ -195,6 +212,26 @@ namespace MondePoulpe.Core
                 }
             }
             return false;
+        }
+        // Return the door at the x,y position or null if one is not found.
+        public Door GetDoor(int x, int y)
+        {
+            return Doors.SingleOrDefault(d => d.X == x && d.Y == y);
+        }
+
+        // The actor opens the door located at the x,y position
+        private void OpenDoor(Actor actor, int x, int y)
+        {
+            Door door = GetDoor(x, y);
+            if (door != null && !door.IsOpen)
+            {
+                door.IsOpen = true;
+                var cell = GetCell(x, y);
+                // Once the door is opened it should be marked as transparent and no longer block field-of-view
+                SetCellProperties(x, y, true, cell.IsWalkable, cell.IsExplored);
+
+                Game.MessageLog.Add($"{actor.Name} opened a door");
+            }
         }
     }
    
