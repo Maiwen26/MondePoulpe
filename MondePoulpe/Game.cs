@@ -11,6 +11,7 @@ namespace MondePoulpe
 {
     class Game
     {
+        int test = 0; 
         // The screen height and width are in number of tiles
         private static readonly int _screenWidth = 100;
         private static readonly int _screenHeight = 70;
