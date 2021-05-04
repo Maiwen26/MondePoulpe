@@ -8,12 +8,10 @@ using System.Threading.Tasks;
 
 namespace MondePoulpe.Core
 {
-    public 
-        class Ocean : Map
+    public class Ocean : Map
     {
-
-        // The Draw method will be called each time the map is updated
-        // It will render all of the symbols/colors for each cell to the map sub console
+        // le méthode dessin sera appelé à chaque fois que la map est mise à jour
+        // Il permet de mettre des symboles à chaque cellule de la map.
         public void Draw(RLConsole mapConsole)
         {
             mapConsole.Clear();
@@ -25,17 +23,16 @@ namespace MondePoulpe.Core
 
         private void SetConsoleSymbolForCell(RLConsole console, Cell cell)
         {
-            // When we haven't explored a cell yet, we don't want to draw anything
+            // quand une cellule n'est pas encore exploré, nous avons pas besoin de dessiné quelques choses
             if (!cell.IsExplored)
             {
                 return;
             }
 
-            // When a cell is currently in the field-of-view it should be drawn with ligher colors
+            //quand une cellule est dans son champ de vision alors elle sera dessiné avec des couleurs plus claires
             if (IsInFov(cell.X, cell.Y))
             {
-                // Choose the symbol to draw based on if the cell is walkable or not
-                // '.' for floor and '#' for walls
+                //les murs sont représentés par des "#" et le sol par des "."
                 if (cell.IsWalkable)
                 {
                     console.Set(cell.X, cell.Y, Colors.FloorFov, Colors.FloorBackgroundFov, '.');
@@ -45,7 +42,7 @@ namespace MondePoulpe.Core
                     console.Set(cell.X, cell.Y, Colors.WallFov, Colors.WallBackgroundFov, '#');
                 }
             }
-            // When a cell is outside of the field of view draw it with darker colors
+            // quand une cellule n'est pas dans son champ de vision, elle est dessiné avec des couleurs foncées
             else
             {
                 if (cell.IsWalkable)
@@ -58,13 +55,13 @@ namespace MondePoulpe.Core
                 }
             }
         }
-        // This method will be called any time we move the player to update field-of-view
+        //Cette méthode sera appelé à chaque fois mouvement du joueur pour mettre à jour son champ de vision
         public void UpdatePlayerFieldOfView()
         {
             Player player = Game.Player;
-            // Compute the field-of-view based on the player's location and awareness
+            //le calcul du champ de vision est basé sur la localisation du joueur et des alentours
             ComputeFov(player.X, player.Y, player.Awareness, true);
-            // Mark all cells in field-of-view as having been explored
+            //Toutes les cellules du champs de vision qui ont déjà été explorées sont marquées.
             foreach (Cell cell in GetAllCells())
             {
                 if (IsInFov(cell.X, cell.Y))
