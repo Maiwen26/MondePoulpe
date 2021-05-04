@@ -1,5 +1,7 @@
-﻿using RLNET;
+﻿using MondePoulpe.Monsters;
+using RLNET;
 using RogueSharp;
+using RogueSharp.DiceNotation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -151,7 +153,7 @@ namespace MondePoulpe.Core
             }
 
             // If we didn't find a walkable location in the room return null
-            return null;
+            return default;
         }
 
         // Iterate through each Cell in the room and return true if any are walkable
@@ -169,6 +171,9 @@ namespace MondePoulpe.Core
             }
             return false;
         }
+
+        
+
     }
    
 }
