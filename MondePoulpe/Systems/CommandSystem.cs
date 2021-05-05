@@ -1,4 +1,4 @@
-﻿using MondePoulpe.Core;
+using MondePoulpe.Core;
 using MondePoulpe.Interfaces;
 using RogueSharp;
 using RogueSharp.DiceNotation;
@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks; 
 
 namespace MondePoulpe.Systems
 {
@@ -57,6 +57,15 @@ namespace MondePoulpe.Systems
                 Attack(Game.Player, monster);
                 return true;
             }
+
+            PNJ pnj = Game.Ocean.GetPNJAt(x, y);
+            if (pnj != null)
+            {
+                Enigme(pnj, Game.Player);
+                return true;
+            }
+
+
 
             return false;
         }
@@ -174,44 +183,23 @@ namespace MondePoulpe.Systems
                 Game.MessageLog.Add($"  {defender.Name} died and dropped {defender.Food} gold");
             }
         }
-        public bool IsPlayerTurn { get; set; }
 
-        public void EndPlayerTurn()
+        private static void Enigme(PNJ pnj, Player poulpe)
         {
-            IsPlayerTurn = false;
-        }
-
-        public void ActivateMonsters()
-        {
-            IScheduleable scheduleable = Game.SchedulingSystem.Get();
-            if (scheduleable is Player)
+            Game.MessageLog.Add( pnj.Name + " a un message pour toi!! \n Pour récuperer des points d'attaque, faites un score de plus de 4 au dé");
+            int dice = Dice.Roll("1D6");
+            Game.MessageLog.Add("Vous avez fait " + dice);
+            if ( dice >4)
             {
-                IsPlayerTurn = true;
-                Game.SchedulingSystem.Add((IScheduleable)Game.Player);
+                poulpe.AddAttack(1);
+                Game.MessageLog.Add(" *** Vous gagnez 1 point d'attaque!! *** ");
+                
             }
             else
             {
-                Monster monster = scheduleable as Monster;
-
-                if (monster != null)
-                {
-                    monster.PerformAction(this);
-                    Game.SchedulingSystem.Add((IScheduleable)monster);
-                }
-
-                ActivateMonsters();
+                Game.MessageLog.Add("Dommage!");
             }
-        }
-
-        public void MoveMonster(Monster monster, Cell cell)
-        {
-            if (!Game.Ocean.SetActorPosition(monster, cell.X, cell.Y))
-            {
-                if (Game.Player.X == cell.X && Game.Player.Y == cell.Y)
-                {
-                    Attack(monster, Game.Player);
-                }
-            }
+            Game.Ocean.RemovePNJ((PNJ)pnj);
         }
     }
 }

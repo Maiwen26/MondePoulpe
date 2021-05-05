@@ -13,10 +13,11 @@ namespace MondePoulpe.Core
             {
                 Awareness = 10,
                 Color = Colors.PNJ,
-                Name = "Raies",
+                Name = "Monsieur Raies",
                 Speed = 0,
-                Symbol = 'R',
+                Symbol = '!',
             };
         }
+
     }
 }

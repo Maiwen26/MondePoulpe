@@ -34,6 +34,8 @@ namespace MondePoulpe.Core
 
         public static RLColor PNJ = Swatch.DbSun;
 
+        //public static RLColor Console = Swatch.Ocean; 
+
 
     }
 }

@@ -52,5 +52,7 @@ namespace MondePoulpe.Core
 
         public static RLColor BlueDark = new RLColor(16, 23, 56);
         public static RLColor Blue = new RLColor(37, 42, 64);
+        public static RLColor Ocean = new RLColor(58, 142, 186);
+        
     }
 }

@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// Les informations générales relatives à un assembly dépendent de l'ensemble d'attributs suivant.
+// Les informations générales relatives à un assembly dépendent de l'ensemble des attributs suivant.
 //Pour changer les valeurs de ces attributs il faut modifier les informations associées à un assembly.
 [assembly: AssemblyTitle("MondePoulpe")]
 [assembly: AssemblyDescription("")]

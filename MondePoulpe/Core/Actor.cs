@@ -1,4 +1,4 @@
-﻿using MondePoulpe.Interfaces;
+using MondePoulpe.Interfaces;
 using RLNET;
 using RogueSharp;
 using System;
@@ -22,7 +22,11 @@ namespace MondePoulpe.Core
         public int Health { get; set; }
         public int MaxHealth { get; set; }
         public int Speed { get; set; }
+<<<<<<< HEAD
        
+=======
+
+>>>>>>> 0f031e3... Modif pnj
         
 
         // IDrawable

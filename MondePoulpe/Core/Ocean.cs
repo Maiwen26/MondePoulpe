@@ -1,4 +1,4 @@
-﻿using RLNET;
+using RLNET;
 using RogueSharp;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,11 @@ namespace MondePoulpe.Core
 {
     public class Ocean : Map
     {
-        private readonly List<Monster> _monsters;
-        private readonly List<PNJ> _pnj;
+        
+        public List<Rectangle> Rooms;
+
+        public List<Rectangle> Rooms;
+
 
         public List<Rectangle> Rooms { get; set; }       
         public List<Door> Doors { get; set; }
@@ -46,6 +49,7 @@ namespace MondePoulpe.Core
                 }
             }
         }
+<<<<<<< HEAD
 
         // Retourne vrai si l'acteur peut être placé sur la cellule ou faux sinon.
         public bool SetActorPosition(Actor actor, int x, int y)
@@ -95,6 +99,10 @@ namespace MondePoulpe.Core
 
 
         // Appelé par MapGenerator après la génération d'une nouvelle carte pour ajouter le joueur à la carte.
+=======
+        
+        // Called by MapGenerator after we generate a new map to add the player to the map
+>>>>>>> 0f031e3... Modif pnj
         public void AddPlayer(Player player)
         {
             Game.Player = player;
@@ -172,6 +180,11 @@ namespace MondePoulpe.Core
             // Add the following code after we finish drawing doors.
             StairsUp.Draw(mapConsole, this);
             StairsDown.Draw(mapConsole, this);
+
+            foreach (PNJ pnj in _pnj)
+            {
+                pnj.Draw(mapConsole, this);
+            }
 
         }
 
@@ -255,9 +268,31 @@ namespace MondePoulpe.Core
             }
             return false;
         }
+<<<<<<< HEAD
         
 
        
+=======
+
+        public void AddPNJ(PNJ pnj)
+        {
+            _pnj.Add(pnj);
+            // Ajout d'un pnj, le poulpe ne pourra alors pas marcher sur cette case
+            SetIsWalkable(pnj.X, pnj.Y, false);
+        }
+
+        public void RemovePNJ(PNJ pnj)
+        {
+            _pnj.Remove(pnj);
+            // Retirer le PNJ du jeu et vérifier que le poulpe peut bien marcher dessus
+            SetIsWalkable(pnj.X, pnj.Y, true);
+        }
+
+        public PNJ GetPNJAt(int x, int y)
+        {
+            return _pnj.FirstOrDefault(m => m.X == x && m.Y == y);
+        }
+>>>>>>> 0f031e3... Modif pnj
     }
    
 }

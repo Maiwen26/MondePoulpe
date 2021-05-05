@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -51,51 +52,52 @@ namespace MondePoulpe
         private static int _mapLevel = 1;
 
         public static void Main()
-            {
-            // Establish the seed for the random number generator from the current time
-            int seed = (int)DateTime.UtcNow.Ticks;
-            Random = new DotNetRandom(seed);
+        {
+ 
+                // Establish the seed for the random number generator from the current time
+                int seed = (int)DateTime.UtcNow.Ticks;
+                Random = new DotNetRandom(seed);
 
-            // The title will appear at the top of the console window 
-            // also include the seed used to generate the level
-            string consoleTitle = $"Monde Poulpe {seed}";
+                // The title will appear at the top of the console window 
+                // also include the seed used to generate the level
+                string consoleTitle = $"Monde Poulpe {seed}";
 
-            // .. old code continues here
 
-            // This must be the exact name of the bitmap font file we are using or it will error.
-            string fontFileName = "terminal8x8.png";
+                // This must be the exact name of the bitmap font file we are using or it will error.
+                string fontFileName = "terminal8x8.png";
                 // Tell RLNet to use the bitmap font that we specified and that each tile is 8 x 8 pixels
                 _rootConsole = new RLRootConsole(fontFileName, _screenWidth, _screenHeight,
                   8, 8, 1f, consoleTitle);
 
-            // Create a new MessageLog and print the random seed used to generate the level
-            MessageLog = new MessageLog();
-            MessageLog.Add($"The rogue arrives on level '{_mapLevel}'");
-            MessageLog.Add($"Level created with seed '{seed}'");
+                // Create a new MessageLog and print the random seed used to generate the level
+                MessageLog = new MessageLog();
+                MessageLog.Add("Le poulpe arrive au niveau 1");
+                MessageLog.Add($"Level created with seed '{seed}'");
 
-            // ... previous code omitted
-            // After the line that starts _rootConsole = new RLRootConsole( ...  
 
-            // Initialize the sub consoles that we will Blit to the root console
-            _mapConsole = new RLConsole(_mapWidth, _mapHeight);
-            _messageConsole = new RLConsole(_messageWidth, _messageHeight);
-            _statConsole = new RLConsole(_statWidth, _statHeight);
-            _inventoryConsole = new RLConsole(_inventoryWidth, _inventoryHeight);
+>>>>>>> 0f031e3... Modif pnj
 
-            // ... additional code omitted
-            MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7,_mapLevel);
-            Ocean = mapGenerator.CreateMap();
-            Ocean.UpdatePlayerFieldOfView();
+                // Initialize the sub consoles that we will Blit to the root console
+                _mapConsole = new RLConsole(_mapWidth, _mapHeight);
+                _messageConsole = new RLConsole(_messageWidth, _messageHeight);
+                _statConsole = new RLConsole(_statWidth, _statHeight);
+                _inventoryConsole = new RLConsole(_inventoryWidth, _inventoryHeight);
 
-            CommandSystem = new CommandSystem();
-            SchedulingSystem = new SchedulingSystem();
 
-            // Set up a handler for RLNET's Update event
-            _rootConsole.Update += OnRootConsoleUpdate;
+                MapGenerator mapGenerator = new MapGenerator(_mapWidth, _mapHeight, 20, 13, 7);
+                Ocean = mapGenerator.CreateMap();
+                Ocean.UpdatePlayerFieldOfView();
+
+                CommandSystem = new CommandSystem();
+>>>>>>> 0f031e3... Modif pnj
+
+                // Set up a handler for RLNET's Update event
+                _rootConsole.Update += OnRootConsoleUpdate;
                 // Set up a handler for RLNET's Render event
                 _rootConsole.Render += OnRootConsoleRender;
                 // Begin RLNET's game loop
                 _rootConsole.Run();
+
         }
 
         // Event handler for RLNET's Update event
@@ -203,6 +205,26 @@ namespace MondePoulpe
 
             // Tell RLNET to draw the console that we set
             _rootConsole.Draw();
+
+        }
+
+        public static int MenuPrincipal() //Fonction qui affiche à l'utilisateur le menu principal et renvoie le numéro du choix de menu 
+        {
+            int NumeroMenu = 0;
+            Console.WriteLine("************************************\nMENU PRINCIPAL(Choix du mode de jeu)\n************************************\n\n 1. Jouer \n 2. Acceder aux regles \n 3. Sauvegarde \n 4. Quitter le jeu");
+            while (NumeroMenu != 1 && NumeroMenu != 2 && NumeroMenu != 3 && NumeroMenu != 4 && NumeroMenu != 5) //Redemande à l'utilisateur de rentrer de nouveau un chiffre si celui-ci ne correspond à aucun menu.
+            {
+                try //Le try et catch permet d'afficher un message d'erreur si l'utilisateur écrit une varibale autre qu'un entier et lui demande de ressaisir un numéro de menu.
+                {
+                    Console.WriteLine("\nSaisir un chiffre pour accéder au menu de votre choix :");
+                    //NumeroMenu = int.Parse(Console.ReadLine());
+                }
+                catch (Exception e)//indique une erreur s'il rentre une lettre
+                {
+                    Console.WriteLine("Le choix n'est pas valide entrez un numéro de menu." + e.Message);
+                }
+            }
+            return NumeroMenu;
 
         }
     }

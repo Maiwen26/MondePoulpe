@@ -34,6 +34,9 @@ namespace MondePoulpe.Core
             statConsole.Print(1, 7, $"Defense: {Defense} ({DefenseChance}%)", Colors.Text);
             statConsole.Print(1, 9, $"Gold:    {Food}", Colors.Gold);
         }
+
+        public void AddAttack(int newAttack)
+        { Attack += newAttack; }
     }
 }
 
